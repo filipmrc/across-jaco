@@ -1,0 +1,25 @@
+cmake_minimum_required(VERSION 2.8.3)
+project(jaco_velocity_interface)
+
+find_package(catkin REQUIRED COMPONENTS
+  joint_state_server
+  roscpp
+  wpi_jaco_wrapper
+  actionlib
+  tf_conversions
+  hardware_interface
+  controller_manager
+)
+
+include_directories(include)
+include_directories(
+  ${catkin_INCLUDE_DIRS}
+)
+
+add_executable(jaco_velocity_interface src/jaco_velocity_interface.cc)
+
+target_link_libraries(jaco_velocity_interface
+   ${catkin_LIBRARIES}
+   Kinova.API.CommLayerUbuntu 
+   Kinova.API.USBCommandLayerUbuntu     
+ )

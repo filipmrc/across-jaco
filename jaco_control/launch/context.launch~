@@ -1,0 +1,9 @@
+<launch>
+	<node name="joint_state_server" pkg="joint_state_server" type="joint_state_server" output="log" args="">
+	</node>
+        <arg name="robot" default="'$(find jaco_description)/robots/cylinder_arm.urdf.xacro'"/>
+  
+        <!-- load jaco urdf -->
+        <!-- send urdf to param server -->
+        <param name="robot_description" command="$(find xacro)/xacro.py $(arg robot)" />
+</launch>

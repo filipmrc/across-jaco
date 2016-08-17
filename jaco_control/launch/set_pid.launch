@@ -1,0 +1,25 @@
+<launch>
+        <param name="/jaco_arm_controller/gains/jaco_joint_1/p" type="double" value="0.5" />
+        <param name="/jaco_arm_controller/gains/jaco_joint_1/p" type="double" value="0.1" />
+        <param name="/jaco_arm_controller/gains/jaco_joint_1/d" type="double" value="300" />
+
+        <param name="/jaco_arm_controller/gains/jaco_joint_2/p" type="double" value="0.5" />
+        <param name="/jaco_arm_controller/gains/jaco_joint_2/p" type="double" value="0.1" />
+        <param name="/jaco_arm_controller/gains/jaco_joint_2/d" type="double" value="300" />
+
+        <param name="/jaco_arm_controller/gains/jaco_joint_3/p" type="double" value="0.5" />
+        <param name="/jaco_arm_controller/gains/jaco_joint_3/p" type="double" value="0.2" />
+        <param name="/jaco_arm_controller/gains/jaco_joint_3/d" type="double" value="300" />
+
+        <param name="/jaco_arm_controller/gains/jaco_joint_4/p" type="double" value="0.5" />
+        <param name="/jaco_arm_controller/gains/jaco_joint_4/p" type="double" value="0.2" />
+        <param name="/jaco_arm_controller/gains/jaco_joint_4/d" type="double" value="300" />
+
+        <param name="/jaco_arm_controller/gains/jaco_joint_5/p" type="double" value="0.5" />
+        <param name="/jaco_arm_controller/gains/jaco_joint_5/p" type="double" value="0.2" />
+        <param name="/jaco_arm_controller/gains/jaco_joint_5/d" type="double" value="300" />
+
+        <param name="/jaco_arm_controller/gains/jaco_joint_6/p" type="double" value="0.5" />
+        <param name="/jaco_arm_controller/gains/jaco_joint_6/p" type="double" value="0.2" />
+        <param name="/jaco_arm_controller/gains/jaco_joint_6/d" type="double" value="300" />
+</launch>

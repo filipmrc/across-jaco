@@ -1,0 +1,83 @@
+#ifndef JACO_CONTROL_H_
+#define JACO_CONTROL_H_
+
+#include <ros/ros.h>
+#include <std_msgs/Float64MultiArray.h>
+#include <joint_state_server/GetAngularPosition.h>
+#include <trajectory_msgs/JointTrajectory.h>
+#include <actionlib/client/simple_action_client.h>
+#include <kinematics/kinematics.h>
+
+class Kinematics;
+
+class RobotArm
+{
+private:
+  ros::ServiceClient client_joints;
+  ros::Publisher velocity_pub;
+  ros::Subscriber goal_sub;
+
+  joint_state_server::GetAngularPosition srv_joints;
+
+  std::string interface;
+  int num_joints;
+
+public:
+  Kinematics* kinematics;
+
+  RobotArm(ros::NodeHandle n)
+  {
+    kinematics = new Kinematics(n);
+    num_joints = kinematics->nj;
+    vels_old.resize(num_joints);
+
+    velocity_pub = n.advertise<std_msgs::Float64MultiArray>("/jaco_arm_controller/command",1);
+    client_joints = n.serviceClient<joint_state_server::GetAngularPosition>("get_angular_position");
+
+    n.getParam("hardware_interface",interface);
+    if(interface.compare("joint_velocity") == 0)
+      {
+	ROS_INFO_STREAM("Joint velocity mode");
+	goal_sub = n.subscribe("/goal", 1 , &RobotArm::setCartesianVelocityGoal, this);
+      }
+    else if(interface.compare("joint_position") == 0)
+      {
+	goal_sub = n.subscribe("/goal", 1 , &RobotArm::setCartesianPoseGoal, this);
+      }
+
+
+  }
+ ~RobotArm()
+ {
+   free(kinematics);
+ }
+
+  //Set goal joint velocity
+  void setJoint(std::vector<float> joint_velocity);
+
+  //Set goal joint position
+  void setJointPosition(std::vector<float> joint_position);
+
+  //Set a goal joint state
+  void setAngularGoal(std::vector<float> joint_goal);
+
+  //Set a goal pose in Cartesian space
+  void setCartesianVelocityGoal(geometry_msgs::TransformStamped goal);
+
+  //Set a goal pose in Cartesian space
+  void setCartesianPoseGoal(geometry_msgs::TransformStamped goal);
+
+  //Get difference between goal and current pose
+  KDL::Twist getError(KDL::Frame goal , KDL::Frame current);
+
+  //Call service that returns current joint state
+  std::vector<float> getJointState();
+  std::vector<float> getJointVel();
+
+  //Scale joint velocities
+  std::vector<float> scaleJointVelocities(std::vector<float> vels);
+
+  void kinectCallback();
+};
+
+#endif /* JACO_CONTROL_H_ */

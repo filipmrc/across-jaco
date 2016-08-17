@@ -1,0 +1,93 @@
+/*
+ * Kinematics.cpp
+ *
+ *  Created on: Oct 30, 2015
+ *      Author: marki
+ */
+
+#include <kinematics/kinematics.h>
+
+ Kinematics::Kinematics(ros::NodeHandle n)
+ {
+   KDL::Tree my_tree;
+   std::string robot_desc_string;
+
+   //get robot description urdf from the parameter server
+   n.param("robot_description", robot_desc_string, std::string());
+
+   //parse the urdf and create a kdl::tree
+   if (!kdl_parser::treeFromString(robot_desc_string, my_tree))
+   {
+     ROS_ERROR("Failed to construct kdl tree");
+     return;
+   }
+
+   //get chain from tree
+   my_tree.getChain("jaco_link_base","jaco_link_hand",chain);
+   nj = chain.getNrOfJoints();
+
+   //initialize solvers
+   fksolver = new KDL::ChainFkSolverPos_recursive(chain);
+   ikvelsolver = new KDL::ChainIkSolverVel_wdls(chain);
+ }
+
+ Kinematics::~Kinematics()
+ {
+   free(ikvelsolver);
+   free(fksolver);
+ }
+
+ KDL::Frame Kinematics::getFK(std::vector<double> joints)
+{
+  // Create joint array
+  KDL::JntArray jointpositions = KDL::JntArray(nj);
+
+  // Assign some values to the joint positions
+  for(unsigned int i=0;i<nj;i++){
+      jointpositions(i)=(double) joints[i];
+  }
+
+  // Get Cartesian position values from kinematics solver
+  KDL::Frame cartpos;
+  bool kinematics_status = fksolver->JntToCart(jointpositions,cartpos,nj);
+  return cartpos;
+}
+
+std::vector<float> Kinematics::getIKvel(KDL::Twist delta, std::vector<double> jpos_)
+  {
+    // Create joint array
+    KDL::JntArray jpos(nj),jvel(nj);
+
+    //delta.rot.Zero();
+    jpos_.resize(nj);
+    // Assign some values to the joint positions
+    for(int i=0;i<nj;i++){
+        jpos(i)= jpos_[i];
+    }
+
+    std::vector<float> vel_res(nj);
+    ikvelsolver->setLambda(0.02);
+
+    if(ikvelsolver->CartToJnt(jpos, delta, jvel)<0)
+    {
+      for(unsigned int i = 0; i < nj; i++)
+      {
+        jvel(i) = 0.0;
+      }
+    }
+
+    for (unsigned int i = 0; i < nj; i++)
+    {
+      vel_res[i]= jvel(i);
+      if (!std::isfinite(vel_res[i]))
+      {
+        ROS_ERROR_THROTTLE(1.0, "Target joint velocity (%d) is not finite : %f", i, vel_res[i]);
+        vel_res[i] = 1.0;
+      }
+    }
+
+
+
+    return vel_res;
+  }
+

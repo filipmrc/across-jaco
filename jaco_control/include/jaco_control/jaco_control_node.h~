@@ -1,0 +1,54 @@
+#ifndef JACO_JACOBIAN_NODE_H_
+#define JACO_JACOBIAN_NODE_H_
+
+#include <ros/ros.h>
+#include <std_msgs/Float64MultiArray.h>
+#include <jaco_jacobian/GetAngularPosition.h>
+#include <jaco_jacobian/jaco_fk.h>
+//#include <wpi_jaco_wrapper/jaco_kinematics.h>
+#include <jaco_kinematics/jaco_kinematics.h>
+
+class RobotArm
+{
+private:
+  ros::ServiceClient client;
+  jaco_jacobian::GetAngularPosition srv;
+  std::vector<double> joint_state;
+  ros::Publisher velocity_pub;
+  std_msgs::Float64MultiArray velocities;
+  JacoKinematics kinematics;
+
+public:
+  RobotArm()
+  {
+    ros::NodeHandle n;
+    joint_state.resize(6);
+    velocity_pub = n.advertise<std_msgs::Float64MultiArray>("/jaco_arm_controller/command",1);
+    sleep(1);
+    velocities.data.resize(6);
+    client = n.serviceClient<jaco_jacobian::GetAngularPosition>("get_angular_position");
+
+
+  }
+ //~RobotArm();
+
+  void setJointVelocity(std::vector<double> joint_position);
+
+  void setJointVelocity(Vector6d joint_velocity);
+
+  void setAngularGoal(std::vector<double> joint_goal);
+
+  void setAngularGoal(Vector6d joint_goal);
+
+  void setCartesianGoal(Vector6d cartesian_goal);
+
+  void getJointState(std::vector<double>& joint_state);
+
+  void getJointState(std::vector<float>& joint_state);
+
+  void getJointState(Vector6d& joint_state);
+
+  void kinectCallback();
+};
+
+#endif /* JACO_JACOBIAN_NODE_H_ */
