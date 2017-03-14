@@ -11,6 +11,10 @@ find_package(catkin REQUIRED COMPONENTS
   controller_manager
 )
 
+catkin_package(
+  CATKIN_DEPENDS 
+)
+
 include_directories(include)
 include_directories(
   ${catkin_INCLUDE_DIRS}

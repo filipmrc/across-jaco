@@ -73,7 +73,7 @@ vector<float> Kinematics::getIKvel(geometry_msgs::Transform current , geometry_m
       if (!isfinite(vel_res[i]))
       {
         ROS_ERROR_THROTTLE(1.0, "Target joint velocity (%d) is not finite : %f", i, vel_res[i]);
-        vel_res[i] = 1.0;
+        vel_res[i] = 0.0;
       }
     }
     return vel_res;

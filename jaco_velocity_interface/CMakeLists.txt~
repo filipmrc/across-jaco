@@ -11,12 +11,15 @@ find_package(catkin REQUIRED COMPONENTS
   controller_manager
 )
 
+catkin_package(
+)
+
 include_directories(include)
 include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-add_executable(jaco_velocity_interface src/joint_velocity_interface/joint_velocity_interface.cc)
+add_executable(jaco_velocity_interface src/jaco_velocity_interface.cc)
 
 target_link_libraries(jaco_velocity_interface
    ${catkin_LIBRARIES}

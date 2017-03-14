@@ -1,17 +1,22 @@
 <launch>
   	<!-- Arm -->
-  	<node name="joint_velocity_interface" pkg="jaco_control" type="joint_velocity_interface" output="screen" />
+  	<node name="jaco_velocity_interface" pkg="jaco_velocity_interface" type="jaco_velocity_interface" output="screen" />
   	<rosparam command="load" file="$(find jaco_control)/config/controller.yaml" />
   	<node name="arm_controller_spawner" pkg="controller_manager" type="spawner" args="jaco_arm_controller" output="screen" />
 
   	<!-- spawn controller -->
   	<node name="joint_state_controller_spawner" pkg="controller_manager" type="spawner" args="joint_state_controller" output="screen" />
 	<node name="joint_state_server" pkg="joint_state_server" type="joint_state_server" output="screen" args=""></node>
-        <arg name="robot" default="'$(find jaco_description)/robots/cylinder_arm.urdf.xacro'"/>
+
         <!-- load jaco urdf -->
+        <arg name="robot" default="'$(find jaco_description)/robots/cylinder_arm.urdf.xacro'"/>
 
         <!-- send urdf to param server -->
-        <param name="hardware_interface" type="str" value="joint_velocity" />
         <param name="robot_description" command="$(find xacro)/xacro.py $(arg robot)" />
-	<node name="jaco_control" pkg="jaco_control" type="jaco_control" output="screen" args=""></node>
+
+        <param name="hardware_interface" type="str" value="joint_velocity" />
+
+  <!-- state publisher -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />
+
 </launch>

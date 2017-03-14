@@ -8,6 +8,10 @@ find_package(catkin REQUIRED COMPONENTS
   jaco_kinematics_kdl
 )
 
+catkin_package(
+  CATKIN_DEPENDS 
+)
+
 include_directories(
   ${catkin_INCLUDE_DIRS}
 )

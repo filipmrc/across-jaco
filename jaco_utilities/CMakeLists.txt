@@ -15,15 +15,16 @@ find_package(catkin REQUIRED COMPONENTS
 find_package(kdl_parser REQUIRED)
 
 catkin_package(
-  INCLUDE_DIRS include
+  CATKIN_DEPENDS 
 )
+
 
 include_directories(include)
 include_directories(
   ${catkin_INCLUDE_DIRS}
 )
  
-add_executable(set_joints src/set_joints/set_joints.cc)
+add_executable(set_joints src/set_joints.cc)
  
 target_link_libraries(set_joints
    ${catkin_LIBRARIES}

@@ -33,7 +33,7 @@ void RobotArm::setJointVelocity(std::vector<float> joint_goal)
   for (int i = 0; i<num_joints; i++)
     {
       joint.data.push_back(joint_goal[i]);
-      if(abs(joint_goal[i]) < 0.001){ joint_goal[i] = 0.00;}
+      if(abs(joint_goal[i]) < 0.0001){ joint_goal[i] = 0.00;}
     }
   velocity_pub.publish(joint);
 }
