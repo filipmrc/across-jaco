@@ -12,7 +12,7 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-add_executable(goal_publisher src/goal_publisher/goal_publisher.cc)
+add_executable(goal_publisher src/goal_publisher.cc)
 
 target_link_libraries(goal_publisher
    ${catkin_LIBRARIES}
