@@ -5,28 +5,35 @@
 JointStateServer::JointStateServer()
 {
   service = n.advertiseService("get_angular_position", &JointStateServer::getAngularPosition,this);
-  sub = n.subscribe("/joint_states", 1, &JointStateServer::jointStatesCallback, this);
+  sub = n.subscribe("/jaco_arm/joint_states", 1, &JointStateServer::jointStatesCallback, this);
   ROS_INFO("angular position server ready");
-  pos.resize(6);
-  vel.resize(6);
+  //pos.resize(6);
+  //vel.resize(6);
 }
 
-void JointStateServer::jointStatesCallback(const sensor_msgs::JointStateConstPtr &state)
+void JointStateServer::jointStatesCallback(const sensor_msgs::JointStateConstPtr &state_)
 {
   for (int var = 0; var < 6; var++)
     {
-      pos[var] = state->position[var];
-      vel[var] = state->velocity[var];
+      //pos[var] = state->position[var];
+      //vel[var] = state->velocity[var];
+      state = *state_;
     }
 }
 
 bool JointStateServer::getAngularPosition(joint_state_server::GetAngularPosition::Request &req , joint_state_server::GetAngularPosition::Response &res)
 {
-  res.pos.resize(6);
+/*  res.pos.resize(6);
   for (int var = 0; var < 6; var++)
     {
       res.pos[var]= pos[var];
     }
+  res.vel.resize(6);
+  for (int var = 0; var < 6; var++)
+    {
+      res.pos[var]= pos[var];
+    }*/
+  res.state = state;
 return true;
 }
 

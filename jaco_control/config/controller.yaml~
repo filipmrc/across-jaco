@@ -1,10 +1,10 @@
 jaco_arm_controller:
   # type: "position_controllers/JointTrajectoryController"
   # jaco_joint_1:
-  # type: velocity_controllers/JointTrajectoryController
+  type: velocity_controllers/JointTrajectoryController
   #   joint: jaco_joint_1 GroupVelocity
   #   pid: {p: 400.0, d: 5500.0, i: 1800.0, i_clamp: 2.0}
-  type: "velocity_controllers/JointGroupVelocityController"
+  # type: "velocity_controllers/JointGroupVelocityController"
   publish_rate: 100
   
   joints:
@@ -38,8 +38,10 @@ jaco_arm_controller:
       {p: 1.0, d: 0.0, i: 0.0, i_clamp: 0.0}
     jaco_joint_3:
       {p: 1.0, d: 0.0, i: 0.0, i_clamp: 0.0}
+      #pid: {p: 400.0, d: 5500.0, i: 1800.0, i_clamp: 2.0}
     jaco_joint_4:
-      pid: {p: 400.0, d: 5500.0, i: 1800.0, i_clamp: 2.0}
+      {p: 1.0, d: 0.0, i: 0.0, i_clamp: 0.0}
+      #pid: {p: 400.0, d: 5500.0, i: 1800.0, i_clamp: 2.0}
     jaco_joint_5:
       {p: 1.0, d: 0.0, i: 0.0, i_clamp: 0.0}
     jaco_joint_6:
@@ -48,3 +50,4 @@ jaco_arm_controller:
 joint_state_controller:
   type: joint_state_controller/JointStateController
   publish_rate: 50
+
